@@ -1,0 +1,42 @@
+{
+	"name": "retold-mcp",
+	"version": "1.0.0",
+	"description": "Serve any meadow-endpoints REST API to AI agents over the Model Context Protocol (stdio and streamable HTTP). Catalog-driven: knows MCP and meadow conventions, not any application's entities.",
+	"main": "source/Retold-MCP-Service.cjs",
+	"license": "MIT",
+	"author": "Steven Velozo <steven@velozo.com>",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/fable-retold/retold-mcp.git"
+	},
+	"homepage": "https://github.com/fable-retold/retold-mcp#readme",
+	"bugs": {
+		"url": "https://github.com/fable-retold/retold-mcp/issues"
+	},
+	"keywords": [
+		"mcp",
+		"model-context-protocol",
+		"meadow",
+		"retold",
+		"ai",
+		"agents",
+		"rest"
+	],
+	"files": [
+		"source",
+		"README.md"
+	],
+	"scripts": {
+		"test": "npx mocha -u tdd --exit --timeout 10000 ./test/*_tests*",
+		"coverage": "npx nyc --reporter=lcov --reporter=text-summary npx mocha -- -u tdd --exit --timeout 10000 ./test/*_tests*"
+	},
+	"dependencies": {
+		"fable-serviceproviderbase": "^3.0.19",
+		"@modelcontextprotocol/sdk": "^1.0.0"
+	},
+	"devDependencies": {
+		"chai": "^4.3.0",
+		"mocha": "^10.0.0",
+		"quackage": "^1.3.0"
+	}
+}
