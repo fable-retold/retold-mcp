@@ -16,13 +16,25 @@ class RetoldMCPMeadowClient
 		this.URL = String(tmpOptions.URL || '').replace(/\/+$/, '');
 		this.Token = tmpOptions.Token || '';
 		this.Version = tmpOptions.Version || '1.0';
+		// Extra headers sent on every request (the catalog layer uses this to carry app-specific
+		// per-scope context, e.g. a target tenant, without teaching this generic client any vocabulary).
+		this.Headers = tmpOptions.Headers || {};
 		this._SchemaCache = {};
+	}
+
+	// A shallow clone that adds (or overrides) request headers -- shares URL/token/version/schema cache.
+	// Lets a catalog scope a run of calls (`pC.withHeaders({...}).reads(...)`) without mutating the client.
+	withHeaders(pExtra)
+	{
+		let tmpClient = new RetoldMCPMeadowClient({ URL: this.URL, Token: this.Token, Version: this.Version, Headers: Object.assign({}, this.Headers, pExtra || {}) });
+		tmpClient._SchemaCache = this._SchemaCache;
+		return tmpClient;
 	}
 
 	async _request(pMethod, pPath, pBody)
 	{
 		let tmpURL = `${this.URL}/${this.Version}/${pPath}`;
-		let tmpHeaders = { 'Content-Type': 'application/json' };
+		let tmpHeaders = Object.assign({ 'Content-Type': 'application/json' }, this.Headers || {});
 		if (this.Token)
 		{
 			tmpHeaders['Authorization'] = `Bearer ${this.Token}`;
