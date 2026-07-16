@@ -1,6 +1,6 @@
 {
 	"name": "retold-mcp",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "Serve any meadow-endpoints REST API to AI agents over the Model Context Protocol (stdio and streamable HTTP). Catalog-driven: knows MCP and meadow conventions, not any application's entities.",
 	"main": "source/Retold-MCP-Service.cjs",
 	"license": "MIT",
