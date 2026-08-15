@@ -290,6 +290,15 @@ class RetoldMCPServer
 			}
 		});
 
+		// Node's http.Server closes an idle keep-alive connection after keepAliveTimeout (default 5s). Behind a
+		// proxy that holds its client/upstream connections warm far longer (nginx keepalive), that short timeout
+		// lets the next request land on a socket this process is closing -- surfacing to the client as a reset /
+		// 502 / net::ERR_FAILED on an otherwise-idle connection, the exact "the MCP goes dead when we pause"
+		// symptom. Hold connections open past a typical proxy idle so that race cannot happen; headersTimeout
+		// must exceed keepAliveTimeout or Node rejects the next request that arrives on a kept-alive socket.
+		tmpHTTPServer.keepAliveTimeout = tmpOptions.KeepAliveTimeoutMs || 65000;
+		tmpHTTPServer.headersTimeout = tmpOptions.HeadersTimeoutMs || 66000;
+
 		await new Promise((resolve) => tmpHTTPServer.listen(pPort, tmpOptions.Host || '127.0.0.1', resolve));
 		return tmpHTTPServer;
 	}
